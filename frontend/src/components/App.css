@@ -1,0 +1,13 @@
+.app > .ui.vertical.left.fixed.menu {
+  width: 250px;
+  overflow-y: auto;
+}
+
+.app > .ui.fluid.container {
+  margin-left: 250px !important;
+  padding: 10px 260px 10px 10px;
+}
+
+.app > .ui.fluid.container .ui.active.dimmer {
+    margin-left: 250px;
+}
