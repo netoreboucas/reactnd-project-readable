@@ -3,26 +3,21 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Dimmer, Item, Loader } from 'semantic-ui-react'
 
-import { loadPosts } from '../actions'
+import { setSelectedCategory, loadPosts } from '../actions'
 
 class Posts extends Component {
   state = {
-    selectedCategory: '',
     posts: {}
   }
 
   getRouteCategory (match) {
-    return match && match.params && match.params.category
+    return (match && match.params && match.params.category) || ''
   }
 
   componentWillMount () {
-    this.setState({
-      selectedCategory: this.getRouteCategory(this.props.match)
-    })
-  }
-
-  componentDidMount () {
-    this.props.loadPosts(this.state.selectedCategory)
+    const category = this.getRouteCategory(this.props.match)
+    this.props.setSelectedCategory(category)
+    this.props.loadPosts(category)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -31,9 +26,9 @@ class Posts extends Component {
     }))
 
     const newCategory = this.getRouteCategory(nextProps.match)
-    if (newCategory !== this.state.selectedCategory) {
-      this.setState({ selectedCategory: newCategory })
-      this.props.loadPosts(this.state.selectedCategory)
+    if (newCategory !== nextProps.selectedCategory) {
+      this.props.setSelectedCategory(newCategory)
+      this.props.loadPosts(newCategory)
     }
   }
 
@@ -65,19 +60,23 @@ class Posts extends Component {
 }
 
 Posts.propTypes = {
+  selectedCategory: PropTypes.string,
   posts: PropTypes.object,
+  setSelectedCategory: PropTypes.func,
   loadPosts: PropTypes.func,
   match: PropTypes.object
 }
 
-function mapStateToProps ({ posts }) {
+function mapStateToProps ({ categories, posts }) {
   return {
+    selectedCategory: categories.selectedCategory,
     posts
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
+    setSelectedCategory: (category) => dispatch(setSelectedCategory(category)),
     loadPosts: (category) => dispatch(loadPosts(category))
   }
 }

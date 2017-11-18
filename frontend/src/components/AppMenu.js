@@ -32,12 +32,12 @@ class AppMenu extends Component {
             <Menu.Item>
               <Menu.Header>Categories</Menu.Header>
               <Menu.Menu>
-                <Menu.Item as={Link} to="/">
+                <Menu.Item as={Link} to="/" active={categories.selectedCategory === ''}>
                   All
                 </Menu.Item>
 
                 {categories.keys.map(key =>
-                  <Menu.Item as={Link} key={key} to={`/${key}`}>
+                  <Menu.Item as={Link} key={key} to={`/${key}`} active={categories.selectedCategory === key}>
                     {capitalize(key)}
                   </Menu.Item>
                 )}
