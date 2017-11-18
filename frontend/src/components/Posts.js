@@ -44,13 +44,19 @@ class Posts extends Component {
               <Item key={key}>
                 <Item.Content>
                   <Item.Header>{posts.values[key].title}</Item.Header>
+                  <Item.Extra>
+                    by <strong>{posts.values[key].author}</strong>
+                  </Item.Extra>
                   <Item.Description>{posts.values[key].body}</Item.Description>
                   <Item.Extra>
-                    <Label icon="check" content={posts.values[key].voteScore} size="tiny" />
-                    <Label size="tiny">
+                    <Label size="small">
                       <Icon name="time" />
                       <Timestamp time={posts.values[key].timestamp / 1000} />
                     </Label>
+                    <Label icon="comments" content={posts.values[key].commentCount} size="small" />
+                    <Label icon="check" content={posts.values[key].voteScore} size="small" className="aaa" />
+                    <Label icon="thumbs up" color="green" size="small" className="bbb" />
+                    <Label icon="thumbs down" color="red" size="small" className="ccc" />
                   </Item.Extra>
                 </Item.Content>
               </Item>
