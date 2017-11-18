@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Dimmer, Item, Loader } from 'semantic-ui-react'
+import { Dimmer, Icon, Item, Label, Loader } from 'semantic-ui-react'
+import Timestamp from 'react-timestamp'
 
 import { setSelectedCategory, loadPosts } from '../actions'
 
@@ -44,6 +45,13 @@ class Posts extends Component {
                 <Item.Content>
                   <Item.Header>{posts.values[key].title}</Item.Header>
                   <Item.Description>{posts.values[key].body}</Item.Description>
+                  <Item.Extra>
+                    <Label icon="check" content={posts.values[key].voteScore} size="tiny" />
+                    <Label size="tiny">
+                      <Icon name="time" />
+                      <Timestamp time={posts.values[key].timestamp / 1000} />
+                    </Label>
+                  </Item.Extra>
                 </Item.Content>
               </Item>
             )}
