@@ -60,16 +60,12 @@ AppMenu.propTypes = {
   loadCategories: PropTypes.func
 }
 
-function mapStateToProps ({ categories }) {
-  return {
-    categories
-  }
-}
+const mapStateToProps = ({ categories }) => ({
+  categories
+})
 
-function mapDispatchToProps (dispatch) {
-  return {
-    loadCategories: () => dispatch(loadCategories())
-  }
+const mapDispatchToProps = {
+  loadCategories
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppMenu)

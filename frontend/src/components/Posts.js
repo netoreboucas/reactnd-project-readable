@@ -83,19 +83,15 @@ Posts.propTypes = {
   match: PropTypes.object
 }
 
-function mapStateToProps ({ categories, posts }) {
-  return {
-    selectedCategory: categories.selectedCategory,
-    posts
-  }
-}
+const mapStateToProps = ({categories, posts}) => ({
+  selectedCategory: categories.selectedCategory,
+  posts
+})
 
-function mapDispatchToProps (dispatch) {
-  return {
-    setSelectedCategory: (category) => dispatch(setSelectedCategory(category)),
-    loadPosts: (category) => dispatch(loadPosts(category)),
-    votePost: (id, option) => dispatch(votePost(id, option))
-  }
+const mapDispatchToProps = {
+  setSelectedCategory,
+  loadPosts,
+  votePost
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts)
