@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Dimmer, Icon, Item, Label, Loader } from 'semantic-ui-react'
 import Timestamp from 'react-timestamp'
 
-import { setSelectedCategory, loadPosts } from '../actions'
+import { setSelectedCategory, loadPosts, votePost } from '../actions'
 
 class Posts extends Component {
   state = {
@@ -40,27 +40,28 @@ class Posts extends Component {
       <div>
         {(posts && posts.loaded) &&
           <Item.Group divided>
-            {posts.keys.map(key =>
-              <Item key={key}>
+            {posts.keys.map(key => {
+              const post = posts.values[key]
+              return <Item key={post.id}>
                 <Item.Content>
-                  <Item.Header>{posts.values[key].title}</Item.Header>
+                  <Item.Header>{post.title}</Item.Header>
                   <Item.Extra>
-                    by <strong>{posts.values[key].author}</strong>
+                    by <strong>{post.author}</strong>
                   </Item.Extra>
-                  <Item.Description>{posts.values[key].body}</Item.Description>
+                  <Item.Description>{post.body}</Item.Description>
                   <Item.Extra>
                     <Label size="small">
                       <Icon name="time" />
-                      <Timestamp time={posts.values[key].timestamp / 1000} />
+                      <Timestamp time={post.timestamp / 1000} />
                     </Label>
-                    <Label icon="comments" content={posts.values[key].commentCount} size="small" />
-                    <Label icon="check" content={posts.values[key].voteScore} size="small" className="aaa" />
-                    <Label icon="thumbs up" color="green" size="small" className="bbb" />
-                    <Label icon="thumbs down" color="red" size="small" className="ccc" />
+                    <Label icon="comments" content={post.commentCount} size="small" />
+                    <Label icon="check" content={post.voteScore} size="small" className="aaa" />
+                    <Label as="a" icon="thumbs up" color="green" size="small" className="bbb" onClick={() => this.props.votePost(post.id, 'upVote')} />
+                    <Label as="a" icon="thumbs down" color="red" size="small" className="ccc" onClick={() => this.props.votePost(post.id, 'downVote')} />
                   </Item.Extra>
                 </Item.Content>
               </Item>
-            )}
+            })}
           </Item.Group>
         }
         {(!posts || !posts.loaded) &&
@@ -78,6 +79,7 @@ Posts.propTypes = {
   posts: PropTypes.object,
   setSelectedCategory: PropTypes.func,
   loadPosts: PropTypes.func,
+  votePost: PropTypes.func,
   match: PropTypes.object
 }
 
@@ -91,7 +93,8 @@ function mapStateToProps ({ categories, posts }) {
 function mapDispatchToProps (dispatch) {
   return {
     setSelectedCategory: (category) => dispatch(setSelectedCategory(category)),
-    loadPosts: (category) => dispatch(loadPosts(category))
+    loadPosts: (category) => dispatch(loadPosts(category)),
+    votePost: (id, option) => dispatch(votePost(id, option))
   }
 }
 

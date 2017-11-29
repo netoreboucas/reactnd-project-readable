@@ -45,6 +45,14 @@ function posts (state = defaultState.posts, action) {
         values: action.data.entities.posts,
         loaded: true
       }
+    case ActionTypes.VOTE_POST:
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          [action.data.result]: action.data.entities.posts[action.data.result]
+        }
+      }
     default:
       return state
   }

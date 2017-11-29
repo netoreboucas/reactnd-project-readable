@@ -27,6 +27,7 @@ export const setSelectedCategory = (category) => ({
 
 export const LOADING_POSTS = 'LOADING_POSTS'
 export const LOADED_POSTS = 'LOADED_POSTS'
+export const VOTE_POST = 'VOTE_POST'
 
 export const loadPosts = (category) => (dispatch) => {
   dispatch(loadingPosts())
@@ -43,3 +44,12 @@ export const loadedPosts = (data) => ({
   type: LOADED_POSTS,
   data
 })
+
+export const votePost = (id, option) => (dispatch) => {
+  return ReadableAPI.votePost(id, option).then((data) => {
+    dispatch({
+      type: VOTE_POST,
+      data
+    })
+  })
+}

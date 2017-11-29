@@ -56,6 +56,7 @@ export const votePost = (id, option) =>
     },
     body: JSON.stringify({ option })
   }).then(res => res.json())
+    .then(post => normalize(post, postSchema))
 
 export const editPost = (id, title, body) =>
   fetch(`${api}/posts/${id}`, {
