@@ -8,7 +8,7 @@ import { setSelectedCategory, loadPosts, votePost } from '../actions'
 
 class Posts extends Component {
   state = {
-    posts: {}
+    posts: null
   }
 
   getRouteCategory (match) {
@@ -38,11 +38,10 @@ class Posts extends Component {
 
     return (
       <div>
-        {(posts && posts.loaded) &&
+        {posts &&
           <Item.Group divided>
-            {posts.keys.map(key => {
-              const post = posts.values[key]
-              return <Item key={post.id}>
+            {posts.map(post => (
+              <Item key={post.id}>
                 <Item.Content>
                   <Item.Header>{post.title}</Item.Header>
                   <Item.Extra>
@@ -61,10 +60,10 @@ class Posts extends Component {
                   </Item.Extra>
                 </Item.Content>
               </Item>
-            })}
+            ))}
           </Item.Group>
         }
-        {(!posts || !posts.loaded) &&
+        {!posts &&
           <Dimmer active inverted>
             <Loader />
           </Dimmer>
@@ -76,7 +75,7 @@ class Posts extends Component {
 
 Posts.propTypes = {
   selectedCategory: PropTypes.string,
-  posts: PropTypes.object,
+  posts: PropTypes.array,
   setSelectedCategory: PropTypes.func,
   loadPosts: PropTypes.func,
   votePost: PropTypes.func,
@@ -85,7 +84,12 @@ Posts.propTypes = {
 
 const mapStateToProps = ({categories, posts}) => ({
   selectedCategory: categories.selectedCategory,
-  posts
+  posts: posts && posts.loaded
+    ? posts.keys.reduce((array, id) => {
+      array.push(posts.values[id])
+      return array
+    }, []).sort((a, b) => (a[posts.sortBy] - b[posts.sortBy])).reverse()
+    : null
 })
 
 const mapDispatchToProps = {

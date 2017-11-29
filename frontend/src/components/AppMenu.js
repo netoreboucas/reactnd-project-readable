@@ -5,11 +5,12 @@ import { connect } from 'react-redux'
 import { Dimmer, Loader, Menu } from 'semantic-ui-react'
 import { capitalize } from '../utils/helpers'
 
-import { loadCategories } from '../actions'
+import { loadCategories, setSortBy } from '../actions'
 
 class AppMenu extends Component {
   state = {
-    categories: {}
+    categories: {},
+    posts: {}
   }
 
   componentDidMount () {
@@ -18,12 +19,13 @@ class AppMenu extends Component {
 
   componentWillReceiveProps (nextProps) {
     this.setState((prevState, props) => ({
-      categories: nextProps.categories
+      categories: nextProps.categories,
+      posts: nextProps.posts
     }))
   }
 
   render () {
-    const { categories } = this.state
+    const { categories, posts } = this.state
 
     return (
       <Menu vertical inverted fixed="left">
@@ -43,6 +45,19 @@ class AppMenu extends Component {
                 )}
               </Menu.Menu>
             </Menu.Item>
+            {(posts && posts.loaded) &&
+              <Menu.Item>
+                <Menu.Header>Sort by</Menu.Header>
+                <Menu.Menu>
+                  <Menu.Item as="a" active={posts.sortBy === 'timestamp'} onClick={() => this.props.setSortBy('timestamp')}>
+                    Date
+                  </Menu.Item>
+                  <Menu.Item as="a" active={posts.sortBy === 'voteScore'} onClick={() => this.props.setSortBy('voteScore')}>
+                    Votes
+                  </Menu.Item>
+                </Menu.Menu>
+              </Menu.Item>
+            }
           </div>
         }
         {(!categories || !categories.loaded) &&
@@ -57,15 +72,19 @@ class AppMenu extends Component {
 
 AppMenu.propTypes = {
   categories: PropTypes.object,
-  loadCategories: PropTypes.func
+  posts: PropTypes.object,
+  loadCategories: PropTypes.func,
+  setSortBy: PropTypes.func
 }
 
-const mapStateToProps = ({ categories }) => ({
-  categories
+const mapStateToProps = ({ categories, posts }) => ({
+  categories,
+  posts
 })
 
 const mapDispatchToProps = {
-  loadCategories
+  loadCategories,
+  setSortBy
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppMenu)

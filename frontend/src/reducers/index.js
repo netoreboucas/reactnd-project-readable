@@ -4,7 +4,7 @@ import * as ActionTypes from '../actions'
 
 const defaultState = {
   categories: { keys: [], values: {}, loaded: false, selectedCategory: '' },
-  posts: { keys: [], values: {}, loaded: false }
+  posts: { keys: [], values: {}, loaded: false, sortBy: 'voteScore' }
 }
 
 function categories (state = defaultState.categories, action) {
@@ -44,6 +44,11 @@ function posts (state = defaultState.posts, action) {
         keys: action.data.result,
         values: action.data.entities.posts,
         loaded: true
+      }
+    case ActionTypes.SET_SORT_BY:
+      return {
+        ...state,
+        sortBy: action.sortBy
       }
     case ActionTypes.VOTE_POST:
       return {

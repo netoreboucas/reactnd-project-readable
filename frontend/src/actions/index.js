@@ -27,6 +27,7 @@ export const setSelectedCategory = (category) => ({
 
 export const LOADING_POSTS = 'LOADING_POSTS'
 export const LOADED_POSTS = 'LOADED_POSTS'
+export const SET_SORT_BY = 'SET_SORT_BY'
 export const VOTE_POST = 'VOTE_POST'
 
 export const loadPosts = (category) => (dispatch) => {
@@ -43,6 +44,11 @@ export const loadingPosts = () => ({
 export const loadedPosts = (data) => ({
   type: LOADED_POSTS,
   data
+})
+
+export const setSortBy = (sortBy) => ({
+  type: SET_SORT_BY,
+  sortBy
 })
 
 export const votePost = (id, option) => (dispatch) => {
