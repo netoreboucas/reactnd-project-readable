@@ -110,14 +110,14 @@ export const voteComment = (id, option) =>
   }).then(res => res.json())
     .then(comment => normalize(comment, commentSchema))
 
-export const editComment = (id, timestamp, body) =>
+export const editComment = (id, body) =>
   fetch(`${api}/comments/${id}`, {
     method: 'PUT',
     headers: {
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ timestamp, body })
+    body: JSON.stringify({ timestamp: Date.now(), body })
   }).then(res => res.json())
 
 export const deleteComment = (id) =>

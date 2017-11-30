@@ -126,6 +126,14 @@ function comments (state = defaultState.comments, action) {
           [action.data.id]: action.data
         }
       }
+    case ActionTypes.EDIT_COMMENT:
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          [action.data.id]: action.data
+        }
+      }
     case ActionTypes.DELETE_COMMENT:
       return {
         ...state,
