@@ -23,6 +23,8 @@ const postSchema = new schema.Entity('posts', {
   category: categorySchema
 })
 
+const commentSchema = new schema.Entity('comments')
+
 export const getCategories = () =>
   fetch(`${api}/categories`, { headers })
     .then(res => res.json())
@@ -46,6 +48,7 @@ export const addPost = (post) =>
 export const getPost = (id) =>
   fetch(`${api}/posts/${id}`, { headers })
     .then(res => res.json())
+    .then(post => normalize(post, postSchema))
 
 export const votePost = (id, option) =>
   fetch(`${api}/posts/${id}`, {
@@ -76,6 +79,7 @@ export const deletePost = (id) =>
 export const getComments = (postId) =>
   fetch(`${api}/posts/${postId}/comments`, { headers })
     .then(res => res.json())
+    .then(comments => normalize(comments, [commentSchema]))
 
 export const addComment = (comment) =>
   fetch(`${api}/comments`, {
@@ -100,6 +104,7 @@ export const voteComment = (id, option) =>
     },
     body: JSON.stringify({ option })
   }).then(res => res.json())
+    .then(comment => normalize(comment, commentSchema))
 
 export const editComment = (id, timestamp, body) =>
   fetch(`${api}/comments/${id}`, {

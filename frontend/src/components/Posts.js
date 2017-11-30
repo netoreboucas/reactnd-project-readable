@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Dimmer, Icon, Item, Label, Loader } from 'semantic-ui-react'
-import Timestamp from 'react-timestamp'
+import { Dimmer, Item, Loader } from 'semantic-ui-react'
 
-import { setSelectedCategory, loadPosts, votePost } from '../actions'
+import PostItem from './PostItem'
+
+import { setSelectedCategory, loadPosts } from '../actions'
 
 class Posts extends Component {
   state = {
@@ -41,25 +42,7 @@ class Posts extends Component {
         {posts &&
           <Item.Group divided>
             {posts.map(post => (
-              <Item key={post.id}>
-                <Item.Content>
-                  <Item.Header>{post.title}</Item.Header>
-                  <Item.Extra>
-                    by <strong>{post.author}</strong>
-                  </Item.Extra>
-                  <Item.Description>{post.body}</Item.Description>
-                  <Item.Extra>
-                    <Label size="small">
-                      <Icon name="time" />
-                      <Timestamp time={post.timestamp / 1000} />
-                    </Label>
-                    <Label icon="comments" content={post.commentCount} size="small" />
-                    <Label icon="check" content={post.voteScore} size="small" className="aaa" />
-                    <Label as="a" icon="thumbs up" color="green" size="small" className="bbb" onClick={() => this.props.votePost(post.id, 'upVote')} />
-                    <Label as="a" icon="thumbs down" color="red" size="small" className="ccc" onClick={() => this.props.votePost(post.id, 'downVote')} />
-                  </Item.Extra>
-                </Item.Content>
-              </Item>
+              <PostItem key={post.id} post={post} />
             ))}
           </Item.Group>
         }
@@ -78,7 +61,6 @@ Posts.propTypes = {
   posts: PropTypes.array,
   setSelectedCategory: PropTypes.func,
   loadPosts: PropTypes.func,
-  votePost: PropTypes.func,
   match: PropTypes.object
 }
 
@@ -94,8 +76,7 @@ const mapStateToProps = ({categories, posts}) => ({
 
 const mapDispatchToProps = {
   setSelectedCategory,
-  loadPosts,
-  votePost
+  loadPosts
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts)

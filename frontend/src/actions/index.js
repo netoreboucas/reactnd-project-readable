@@ -29,6 +29,7 @@ export const LOADING_POSTS = 'LOADING_POSTS'
 export const LOADED_POSTS = 'LOADED_POSTS'
 export const SET_SORT_BY = 'SET_SORT_BY'
 export const VOTE_POST = 'VOTE_POST'
+export const GET_POST = 'GET_POST'
 
 export const loadPosts = (category) => (dispatch) => {
   dispatch(loadingPosts())
@@ -55,6 +56,46 @@ export const votePost = (id, option) => (dispatch) => {
   return ReadableAPI.votePost(id, option).then((data) => {
     dispatch({
       type: VOTE_POST,
+      data
+    })
+  })
+}
+
+export const getPost = (id) => (dispatch) => {
+  return ReadableAPI.getPost(id).then((data) => {
+    dispatch({
+      type: GET_POST,
+      data
+    })
+  })
+}
+
+export const LOADING_COMMENTS = 'LOADING_COMMENTS'
+export const LOADED_COMMENTS = 'LOADED_COMMENTS'
+export const VOTE_COMMENT = 'VOTE_COMMENT'
+
+export const loadComments = (postId) => (dispatch) => {
+  dispatch(loadingComments(postId))
+  return ReadableAPI.getComments(postId).then((data) => {
+    dispatch(loadedComments(postId, data))
+  })
+}
+
+export const loadingComments = (postId) => ({
+  type: LOADING_COMMENTS,
+  postId
+})
+
+export const loadedComments = (postId, data) => ({
+  type: LOADED_COMMENTS,
+  postId,
+  data
+})
+
+export const voteComment = (id, option) => (dispatch) => {
+  return ReadableAPI.voteComment(id, option).then((data) => {
+    dispatch({
+      type: VOTE_COMMENT,
       data
     })
   })

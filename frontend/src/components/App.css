@@ -12,26 +12,35 @@
     margin-left: 250px;
 }
 
-.app .item .content .extra .ui.label.aaa {
+.app .item .content .extra .ui.label.countVote,
+.app .comment .content .metadata .ui.label.countVote {
   margin-right: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.app .item .content .extra .ui.label.bbb {
+.app .item .content .extra strong {
+  color: rgba(0,0,0,.87);
+}
+
+.app .item .content .extra .ui.label.upVote,
+.app .comment .content .metadata .ui.label.upVote {
   margin-right: 0;
   border-radius: 0;
 }
 
-.app .item .content .extra .ui.label.bbb > i {
+.app .item .content .extra .ui.label.upVote > i,
+.app .comment .content .metadata .ui.label.upVote > i {
   margin-right: 0;
 }
 
-.app .item .content .extra .ui.label.ccc {
+.app .item .content .extra .ui.label.downVote,
+.app .comment .content .metadata .ui.label.downVote {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-.app .item .content .extra .ui.label.ccc > i {
+.app .item .content .extra .ui.label.downVote > i,
+.app .comment .content .metadata .ui.label.downVote > i {
   margin-right: 0;
 }

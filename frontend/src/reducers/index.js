@@ -4,7 +4,8 @@ import * as ActionTypes from '../actions'
 
 const defaultState = {
   categories: { keys: [], values: {}, loaded: false, selectedCategory: '' },
-  posts: { keys: [], values: {}, loaded: false, sortBy: 'voteScore' }
+  posts: { keys: [], values: {}, loaded: false, sortBy: 'voteScore', selectedPostId: null },
+  comments: { keys: [], values: {}, loaded: false }
 }
 
 function categories (state = defaultState.categories, action) {
@@ -58,6 +59,42 @@ function posts (state = defaultState.posts, action) {
           [action.data.result]: action.data.entities.posts[action.data.result]
         }
       }
+    case ActionTypes.GET_POST:
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          [action.data.result]: action.data.entities.posts[action.data.result]
+        },
+        selectedPostId: action.data.result
+      }
+    default:
+      return state
+  }
+}
+
+function comments (state = defaultState.comments, action) {
+  switch (action.type) {
+    case ActionTypes.LOADING_COMMENTS:
+      return {
+        ...state,
+        loaded: false
+      }
+    case ActionTypes.LOADED_COMMENTS:
+      return {
+        ...state,
+        keys: action.data.result,
+        values: action.data.entities.comments,
+        loaded: true
+      }
+    case ActionTypes.VOTE_COMMENT:
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          [action.data.result]: action.data.entities.comments[action.data.result]
+        }
+      }
     default:
       return state
   }
@@ -65,5 +102,6 @@ function posts (state = defaultState.posts, action) {
 
 export default combineReducers({
   categories,
-  posts
+  posts,
+  comments
 })
