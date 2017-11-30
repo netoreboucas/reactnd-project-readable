@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Comment, Icon, Label } from 'semantic-ui-react'
 import Timestamp from 'react-timestamp'
 
-import { voteComment } from '../actions'
+import { voteComment, deleteComment } from '../actions'
 
 class CommentItem extends Component {
   render () {
@@ -26,7 +26,7 @@ class CommentItem extends Component {
           <Comment.Text>{comment.body}</Comment.Text>
           <Comment.Actions>
             <Comment.Action>Edit</Comment.Action>
-            <Comment.Action>Delete</Comment.Action>
+            <Comment.Action onClick={() => this.props.deleteComment(comment.id)}>Delete</Comment.Action>
           </Comment.Actions>
         </Comment.Content>
       </Comment>
@@ -36,11 +36,13 @@ class CommentItem extends Component {
 
 CommentItem.propTypes = {
   comment: PropTypes.object,
-  voteComment: PropTypes.func
+  voteComment: PropTypes.func,
+  deleteComment: PropTypes.func
 }
 
 const mapDispatchToProps = {
-  voteComment
+  voteComment,
+  deleteComment
 }
 
 export default connect(null, mapDispatchToProps)(CommentItem)

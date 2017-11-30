@@ -24,7 +24,8 @@ class PostItem extends Component {
             <Label icon="check" content={post.voteScore} size="small" className="countVote" />
             <Label as="a" icon="thumbs up" color="green" size="small" className="upVote" onClick={() => this.props.votePost(post.id, 'upVote')} />
             <Label as="a" icon="thumbs down" color="red" size="small" className="downVote" onClick={() => this.props.votePost(post.id, 'downVote')} />
-            <Label icon="comments" content={post.commentCount} size="small" />
+            <Label as={Link} to={`/${post.category}/${post.id}`} icon="comments" content={post.commentCount} size="small" />
+            <Label as={Link} to={`/${post.category}`} icon="tag" content={post.category} size="small" />
           </Item.Extra>
           <Item.Description>{post.body}</Item.Description>
         </Item.Content>

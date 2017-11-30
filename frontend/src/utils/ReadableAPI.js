@@ -122,5 +122,10 @@ export const editComment = (id, timestamp, body) =>
 
 export const deleteComment = (id) =>
   fetch(`${api}/comments/${id}`, {
-    method: 'DELETE'
+    method: 'DELETE',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    }
   }).then(res => res.json())
+    .then(comment => normalize(comment, commentSchema))

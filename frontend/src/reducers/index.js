@@ -79,6 +79,17 @@ function posts (state = defaultState.posts, action) {
           }
         }
       }
+    case ActionTypes.DELETE_COMMENT:
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          [action.data.entities.comments[action.data.result].parentId]: {
+            ...state.values[action.data.entities.comments[action.data.result].parentId],
+            commentCount: state.values[action.data.entities.comments[action.data.result].parentId].commentCount - 1
+          }
+        }
+      }
     default:
       return state
   }
@@ -114,6 +125,17 @@ function comments (state = defaultState.comments, action) {
           ...state.values,
           [action.data.id]: action.data
         }
+      }
+    case ActionTypes.DELETE_COMMENT:
+      return {
+        ...state,
+        keys: state.keys.filter(id => id !== action.data.result),
+        values: Object.keys(state.values).reduce((result, id) => {
+          if (id !== action.data.result) {
+            result[id] = state.values[id]
+          }
+          return result
+        }, {})
       }
     default:
       return state

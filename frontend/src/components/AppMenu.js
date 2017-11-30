@@ -5,12 +5,11 @@ import { connect } from 'react-redux'
 import { Dimmer, Loader, Menu } from 'semantic-ui-react'
 import { capitalize } from '../utils/helpers'
 
-import { loadCategories, setSortBy } from '../actions'
+import { loadCategories } from '../actions'
 
 class AppMenu extends Component {
   state = {
-    categories: {},
-    posts: {}
+    categories: {}
   }
 
   componentDidMount () {
@@ -25,40 +24,25 @@ class AppMenu extends Component {
   }
 
   render () {
-    const { categories, posts } = this.state
+    const { categories } = this.state
 
     return (
       <Menu vertical inverted fixed="left">
         {(categories && categories.loaded) &&
-          <div>
-            <Menu.Item>
-              <Menu.Header>Categories</Menu.Header>
-              <Menu.Menu>
-                <Menu.Item as={Link} to="/" active={categories.selectedCategory === ''}>
-                  All
-                </Menu.Item>
-
-                {categories.keys.map(key =>
-                  <Menu.Item as={Link} key={key} to={`/${key}`} active={categories.selectedCategory === key}>
-                    {capitalize(key)}
-                  </Menu.Item>
-                )}
-              </Menu.Menu>
-            </Menu.Item>
-            {(posts && posts.loaded) &&
-              <Menu.Item>
-                <Menu.Header>Sort by</Menu.Header>
-                <Menu.Menu>
-                  <Menu.Item as="a" active={posts.sortBy === 'timestamp'} onClick={() => this.props.setSortBy('timestamp')}>
-                    Date
-                  </Menu.Item>
-                  <Menu.Item as="a" active={posts.sortBy === 'voteScore'} onClick={() => this.props.setSortBy('voteScore')}>
-                    Votes
-                  </Menu.Item>
-                </Menu.Menu>
+          <Menu.Item>
+            <Menu.Header>Categories</Menu.Header>
+            <Menu.Menu>
+              <Menu.Item as={Link} to="/" active={categories.selectedCategory === ''}>
+                All
               </Menu.Item>
-            }
-          </div>
+
+              {categories.keys.map(key =>
+                <Menu.Item as={Link} key={key} to={`/${key}`} active={categories.selectedCategory === key}>
+                  {capitalize(key)}
+                </Menu.Item>
+              )}
+            </Menu.Menu>
+          </Menu.Item>
         }
         {(!categories || !categories.loaded) &&
           <Dimmer active>
@@ -73,18 +57,15 @@ class AppMenu extends Component {
 AppMenu.propTypes = {
   categories: PropTypes.object,
   posts: PropTypes.object,
-  loadCategories: PropTypes.func,
-  setSortBy: PropTypes.func
+  loadCategories: PropTypes.func
 }
 
-const mapStateToProps = ({ categories, posts }) => ({
-  categories,
-  posts
+const mapStateToProps = ({ categories }) => ({
+  categories
 })
 
 const mapDispatchToProps = {
-  loadCategories,
-  setSortBy
+  loadCategories
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppMenu)

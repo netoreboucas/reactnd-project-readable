@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Dimmer, Item, Loader } from 'semantic-ui-react'
+import { Dimmer, Item, Loader, Menu } from 'semantic-ui-react'
 
 import PostItem from './PostItem'
 
-import { setSelectedCategory, loadPosts } from '../actions'
+import { setSelectedCategory, loadPosts, setSortBy } from '../actions'
 
 class Posts extends Component {
   state = {
@@ -24,7 +24,8 @@ class Posts extends Component {
 
   componentWillReceiveProps (nextProps) {
     this.setState((prevState, props) => ({
-      posts: nextProps.posts
+      posts: nextProps.posts,
+      sortBy: nextProps.sortBy
     }))
 
     const newCategory = this.getRouteCategory(nextProps.match)
@@ -35,10 +36,20 @@ class Posts extends Component {
   }
 
   render () {
-    const { posts } = this.state
+    const { posts, sortBy } = this.state
 
     return (
       <div>
+        <Menu>
+          <Menu.Item header>Sort by</Menu.Item>
+          <Menu.Item active={sortBy === 'timestamp'} onClick={() => this.props.setSortBy('timestamp')}>
+            Date
+          </Menu.Item>
+          <Menu.Item active={sortBy === 'voteScore'} onClick={() => this.props.setSortBy('voteScore')}>
+            Votes
+          </Menu.Item>
+        </Menu>
+
         {posts &&
           <Item.Group divided>
             {posts.map(post => (
@@ -59,8 +70,10 @@ class Posts extends Component {
 Posts.propTypes = {
   selectedCategory: PropTypes.string,
   posts: PropTypes.array,
+  sortBy: PropTypes.string,
   setSelectedCategory: PropTypes.func,
   loadPosts: PropTypes.func,
+  setSortBy: PropTypes.func,
   match: PropTypes.object
 }
 
@@ -71,12 +84,14 @@ const mapStateToProps = ({categories, posts}) => ({
       array.push(posts.values[id])
       return array
     }, []).sort((a, b) => (a[posts.sortBy] - b[posts.sortBy])).reverse()
-    : null
+    : null,
+  sortBy: posts && posts.loaded ? posts.sortBy : null
 })
 
 const mapDispatchToProps = {
   setSelectedCategory,
-  loadPosts
+  loadPosts,
+  setSortBy
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts)
