@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Comment, Dimmer, Header, Icon, Item, Label, Loader } from 'semantic-ui-react'
-import Timestamp from 'react-timestamp'
+import { Comment, Dimmer, Header, Icon, Item, Loader } from 'semantic-ui-react'
 
 import PostItem from './PostItem'
 import CommentItem from './CommentItem'
+import AddCommentForm from './AddCommentForm'
 
 import { getPost, loadComments } from '../actions'
 
@@ -35,8 +35,6 @@ class PostDetails extends Component {
   render () {
     const { post, comments } = this.state
 
-    console.log(comments)
-
     return (
       <div>
         {post && comments &&
@@ -54,6 +52,8 @@ class PostDetails extends Component {
               {comments.map(comment => (
                 <CommentItem key={comment.id} comment={comment} />
               ))}
+
+              <AddCommentForm postId={post.id} />
 
             </Comment.Group>
           </div>

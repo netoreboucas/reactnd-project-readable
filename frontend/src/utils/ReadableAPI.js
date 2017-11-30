@@ -88,7 +88,11 @@ export const addComment = (comment) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(comment)
+    body: JSON.stringify({
+      ...comment,
+      id: uuid(),
+      timestamp: Date.now()
+    })
   }).then(res => res.json())
 
 export const getComment = (id) =>

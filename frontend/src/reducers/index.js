@@ -68,6 +68,17 @@ function posts (state = defaultState.posts, action) {
         },
         selectedPostId: action.data.result
       }
+    case ActionTypes.ADD_COMMENT:
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          [action.data.parentId]: {
+            ...state.values[action.data.parentId],
+            commentCount: state.values[action.data.parentId].commentCount + 1
+          }
+        }
+      }
     default:
       return state
   }
@@ -93,6 +104,15 @@ function comments (state = defaultState.comments, action) {
         values: {
           ...state.values,
           [action.data.result]: action.data.entities.comments[action.data.result]
+        }
+      }
+    case ActionTypes.ADD_COMMENT:
+      return {
+        ...state,
+        keys: state.keys.concat(action.data.id),
+        values: {
+          ...state.values,
+          [action.data.id]: action.data
         }
       }
     default:

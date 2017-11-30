@@ -73,6 +73,7 @@ export const getPost = (id) => (dispatch) => {
 export const LOADING_COMMENTS = 'LOADING_COMMENTS'
 export const LOADED_COMMENTS = 'LOADED_COMMENTS'
 export const VOTE_COMMENT = 'VOTE_COMMENT'
+export const ADD_COMMENT = 'ADD_COMMENT'
 
 export const loadComments = (postId) => (dispatch) => {
   dispatch(loadingComments(postId))
@@ -96,6 +97,15 @@ export const voteComment = (id, option) => (dispatch) => {
   return ReadableAPI.voteComment(id, option).then((data) => {
     dispatch({
       type: VOTE_COMMENT,
+      data
+    })
+  })
+}
+
+export const addComment = (comment) => (dispatch) => {
+  return ReadableAPI.addComment(comment).then((data) => {
+    dispatch({
+      type: ADD_COMMENT,
       data
     })
   })
