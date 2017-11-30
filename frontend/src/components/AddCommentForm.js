@@ -35,7 +35,7 @@ class AddCommentForm extends Component {
       <Form onSubmit={this.handleSubmit} reply>
         <Form.Input label="Author" placeholder="What's your name?" name="author" value={author} onChange={this.handleChange} required />
         <Form.TextArea label="Comment" placeholder="Write here your comment about the post..." name="body" value={body} onChange={this.handleChange} required />
-        <Button content="Add comment" labelPosition="left" icon="add square" primary />
+        <Button primary>Add comment</Button>
       </Form>
     )
   }

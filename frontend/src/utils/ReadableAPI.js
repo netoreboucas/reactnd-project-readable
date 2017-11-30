@@ -42,7 +42,11 @@ export const addPost = (post) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(post)
+    body: JSON.stringify({
+      ...post,
+      id: uuid(),
+      timestamp: Date.now()
+    })
   }).then(res => res.json())
     .then(post => normalize(post, postSchema))
 
@@ -75,7 +79,8 @@ export const editPost = (id, title, body) =>
 
 export const deletePost = (id) =>
   fetch(`${api}/posts/${id}`, {
-    method: 'DELETE'
+    method: 'DELETE',
+    headers
   }).then(res => res.json())
     .then(post => normalize(post, postSchema))
 
@@ -124,9 +129,6 @@ export const editComment = (id, body) =>
 export const deleteComment = (id) =>
   fetch(`${api}/comments/${id}`, {
     method: 'DELETE',
-    headers: {
-      ...headers,
-      'Content-Type': 'application/json'
-    }
+    headers
   }).then(res => res.json())
     .then(comment => normalize(comment, commentSchema))

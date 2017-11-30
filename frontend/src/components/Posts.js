@@ -9,7 +9,8 @@ import { setSelectedCategory, loadPosts, setSortBy } from '../actions'
 
 class Posts extends Component {
   state = {
-    posts: null
+    posts: null,
+    sortBy: null
   }
 
   getRouteCategory (match) {
@@ -80,9 +81,9 @@ Posts.propTypes = {
 const mapStateToProps = ({categories, posts}) => ({
   selectedCategory: categories.selectedCategory,
   posts: posts && posts.loaded
-    ? posts.keys.reduce((array, id) => {
-      array.push(posts.values[id])
-      return array
+    ? posts.keys.reduce((result, id) => {
+      result.push(posts.values[id])
+      return result
     }, []).sort((a, b) => (a[posts.sortBy] - b[posts.sortBy])).reverse()
     : null,
   sortBy: posts && posts.loaded ? posts.sortBy : null

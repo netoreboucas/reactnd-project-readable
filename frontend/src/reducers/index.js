@@ -68,6 +68,34 @@ function posts (state = defaultState.posts, action) {
         },
         selectedPostId: action.data.result
       }
+    case ActionTypes.ADD_POST:
+      return {
+        ...state,
+        keys: state.keys.concat(action.data.result),
+        values: {
+          ...state.values,
+          [action.data.result]: action.data.entities.posts[action.data.result]
+        }
+      }
+    case ActionTypes.EDIT_POST:
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          [action.data.result]: action.data.entities.posts[action.data.result]
+        }
+      }
+    case ActionTypes.DELETE_POST:
+      return {
+        ...state,
+        keys: state.keys.filter(id => id !== action.data.result),
+        values: Object.keys(state.values).reduce((result, id) => {
+          if (id !== action.data.result) {
+            result[id] = state.values[id]
+          }
+          return result
+        }, {})
+      }
     case ActionTypes.ADD_COMMENT:
       return {
         ...state,

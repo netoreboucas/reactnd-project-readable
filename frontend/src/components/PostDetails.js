@@ -79,9 +79,9 @@ PostDetails.propTypes = {
 const mapStateToProps = ({posts, comments}) => ({
   post: posts && posts.selectedPostId && posts.values[posts.selectedPostId],
   comments: comments && comments.loaded
-    ? comments.keys.reduce((array, id) => {
-      array.push(comments.values[id])
-      return array
+    ? comments.keys.reduce((result, id) => {
+      result.push(comments.values[id])
+      return result
     }, []).sort((a, b) => (a.voteScore - b.voteScore)).reverse()
     : null
 })

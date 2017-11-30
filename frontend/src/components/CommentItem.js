@@ -56,7 +56,7 @@ class CommentItem extends Component {
         </Comment.Content>
 
         <Modal open={openEditModal}>
-          <Header icon="pencil" content="Edit comment" />
+          <Header icon="edit" content="Edit comment" />
           <Modal.Content>
             <Form id="editForm" onSubmit={() => this.confirmEditComment(comment.id, body)}>
               <Form.TextArea placeholder="Write here your comment about the post..." name="body" value={body} onChange={this.handleChange} required />
@@ -86,14 +86,14 @@ class CommentItem extends Component {
 CommentItem.propTypes = {
   comment: PropTypes.object,
   voteComment: PropTypes.func,
-  deleteComment: PropTypes.func,
-  editComment: PropTypes.func
+  editComment: PropTypes.func,
+  deleteComment: PropTypes.func
 }
 
 const mapDispatchToProps = {
   voteComment,
-  deleteComment,
-  editComment
+  editComment,
+  deleteComment
 }
 
 export default connect(null, mapDispatchToProps)(CommentItem)

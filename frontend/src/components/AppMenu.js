@@ -5,11 +5,14 @@ import { connect } from 'react-redux'
 import { Dimmer, Loader, Menu } from 'semantic-ui-react'
 import { capitalize } from '../utils/helpers'
 
+import AddPostModal from './AddPostModal'
+
 import { loadCategories } from '../actions'
 
 class AppMenu extends Component {
   state = {
-    categories: {}
+    categories: null,
+    selectedCategory: null
   }
 
   componentDidMount () {
@@ -19,32 +22,35 @@ class AppMenu extends Component {
   componentWillReceiveProps (nextProps) {
     this.setState((prevState, props) => ({
       categories: nextProps.categories,
-      posts: nextProps.posts
+      selectedCategory: nextProps.selectedCategory
     }))
   }
 
   render () {
-    const { categories } = this.state
+    const { categories, selectedCategory } = this.state
 
     return (
       <Menu vertical inverted fixed="left">
-        {(categories && categories.loaded) &&
-          <Menu.Item>
-            <Menu.Header>Categories</Menu.Header>
-            <Menu.Menu>
-              <Menu.Item as={Link} to="/" active={categories.selectedCategory === ''}>
-                All
-              </Menu.Item>
-
-              {categories.keys.map(key =>
-                <Menu.Item as={Link} key={key} to={`/${key}`} active={categories.selectedCategory === key}>
-                  {capitalize(key)}
+        {categories &&
+          <div>
+            <AddPostModal />
+            <Menu.Item>
+              <Menu.Header>Categories</Menu.Header>
+              <Menu.Menu>
+                <Menu.Item as={Link} to="/" active={selectedCategory === ''}>
+                  All
                 </Menu.Item>
-              )}
-            </Menu.Menu>
-          </Menu.Item>
+
+                {categories.map(category =>
+                  <Menu.Item as={Link} key={category.path} to={`/${category.path}`} active={selectedCategory === category.path}>
+                    {capitalize(category.name)}
+                  </Menu.Item>
+                )}
+              </Menu.Menu>
+            </Menu.Item>
+          </div>
         }
-        {(!categories || !categories.loaded) &&
+        {!categories &&
           <Dimmer active>
             <Loader />
           </Dimmer>
@@ -55,13 +61,19 @@ class AppMenu extends Component {
 }
 
 AppMenu.propTypes = {
-  categories: PropTypes.object,
-  posts: PropTypes.object,
+  categories: PropTypes.array,
+  selectedCategory: PropTypes.string,
   loadCategories: PropTypes.func
 }
 
 const mapStateToProps = ({ categories }) => ({
-  categories
+  categories: categories && categories.loaded
+    ? categories.keys.reduce((result, id) => {
+      result.push(categories.values[id])
+      return result
+    }, [])
+    : null,
+  selectedCategory: categories && categories.loaded ? categories.selectedCategory : null
 })
 
 const mapDispatchToProps = {
