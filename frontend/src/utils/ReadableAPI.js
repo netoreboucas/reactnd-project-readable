@@ -44,6 +44,7 @@ export const addPost = (post) =>
     },
     body: JSON.stringify(post)
   }).then(res => res.json())
+    .then(post => normalize(post, postSchema))
 
 export const getPost = (id) =>
   fetch(`${api}/posts/${id}`, { headers })
@@ -70,11 +71,13 @@ export const editPost = (id, title, body) =>
     },
     body: JSON.stringify({ title, body })
   }).then(res => res.json())
+    .then(post => normalize(post, postSchema))
 
 export const deletePost = (id) =>
   fetch(`${api}/posts/${id}`, {
     method: 'DELETE'
   }).then(res => res.json())
+    .then(post => normalize(post, postSchema))
 
 export const getComments = (postId) =>
   fetch(`${api}/posts/${postId}/comments`, { headers })
@@ -94,10 +97,7 @@ export const addComment = (comment) =>
       timestamp: Date.now()
     })
   }).then(res => res.json())
-
-export const getComment = (id) =>
-  fetch(`${api}/comments/${id}`, { headers })
-    .then(res => res.json())
+    .then(comment => normalize(comment, commentSchema))
 
 export const voteComment = (id, option) =>
   fetch(`${api}/comments/${id}`, {
@@ -119,6 +119,7 @@ export const editComment = (id, body) =>
     },
     body: JSON.stringify({ timestamp: Date.now(), body })
   }).then(res => res.json())
+    .then(comment => normalize(comment, commentSchema))
 
 export const deleteComment = (id) =>
   fetch(`${api}/comments/${id}`, {

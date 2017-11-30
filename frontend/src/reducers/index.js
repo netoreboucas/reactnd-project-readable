@@ -73,9 +73,9 @@ function posts (state = defaultState.posts, action) {
         ...state,
         values: {
           ...state.values,
-          [action.data.parentId]: {
-            ...state.values[action.data.parentId],
-            commentCount: state.values[action.data.parentId].commentCount + 1
+          [action.data.entities.comments[action.data.result].parentId]: {
+            ...state.values[action.data.entities.comments[action.data.result].parentId],
+            commentCount: state.values[action.data.entities.comments[action.data.result].parentId].commentCount + 1
           }
         }
       }
@@ -120,10 +120,10 @@ function comments (state = defaultState.comments, action) {
     case ActionTypes.ADD_COMMENT:
       return {
         ...state,
-        keys: state.keys.concat(action.data.id),
+        keys: state.keys.concat(action.data.result),
         values: {
           ...state.values,
-          [action.data.id]: action.data
+          [action.data.result]: action.data.entities.comments[action.data.result]
         }
       }
     case ActionTypes.EDIT_COMMENT:
@@ -131,7 +131,7 @@ function comments (state = defaultState.comments, action) {
         ...state,
         values: {
           ...state.values,
-          [action.data.id]: action.data
+          [action.data.result]: action.data.entities.comments[action.data.result]
         }
       }
     case ActionTypes.DELETE_COMMENT:
