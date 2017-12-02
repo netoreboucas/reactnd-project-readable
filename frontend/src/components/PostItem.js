@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 import { Button, Form, Header, Icon, Item, Label, Modal } from 'semantic-ui-react'
 import Timestamp from 'react-timestamp'
 
@@ -34,7 +35,11 @@ class PostItem extends Component {
   }
 
   confirmDeletePost = (id) => {
-    this.props.deletePost(id)
+    this.props.deletePost(id).then(() => {
+      if (this.props.afterDeleteRedirectTo) {
+        this.props.history.push(this.props.afterDeleteRedirectTo)
+      }
+    })
   }
 
   render () {
@@ -94,10 +99,12 @@ class PostItem extends Component {
 }
 
 PostItem.propTypes = {
+  afterDeleteRedirectTo: PropTypes.string,
   post: PropTypes.object,
   votePost: PropTypes.func,
   editPost: PropTypes.func,
-  deletePost: PropTypes.func
+  deletePost: PropTypes.func,
+  history: PropTypes.object
 }
 
 const mapDispatchToProps = {
@@ -106,4 +113,4 @@ const mapDispatchToProps = {
   deletePost
 }
 
-export default connect(null, mapDispatchToProps)(PostItem)
+export default withRouter(connect(null, mapDispatchToProps)(PostItem))

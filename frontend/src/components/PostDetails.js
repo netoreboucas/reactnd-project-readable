@@ -30,6 +30,12 @@ class PostDetails extends Component {
       post: nextProps.post,
       comments: nextProps.comments
     }))
+
+    const newPostId = this.getRoutePostId(nextProps.match)
+    if (nextProps.post && newPostId !== nextProps.post.id) {
+      this.props.getPost(newPostId)
+      this.props.loadComments(newPostId)
+    }
   }
 
   render () {
@@ -40,7 +46,7 @@ class PostDetails extends Component {
         {post && comments &&
           <div>
             <Item.Group divided>
-              <PostItem post={post} />
+              <PostItem post={post} afterDeleteRedirectTo={`/${post.category}`} />
             </Item.Group>
 
             <Comment.Group>
@@ -77,7 +83,7 @@ PostDetails.propTypes = {
 }
 
 const mapStateToProps = ({posts, comments}) => ({
-  post: posts && posts.selectedPostId && posts.values[posts.selectedPostId],
+  post: posts && posts.selectedPostId ? posts.values[posts.selectedPostId] : null,
   comments: comments && comments.loaded
     ? comments.keys.reduce((result, id) => {
       result.push(comments.values[id])
