@@ -15,14 +15,23 @@ class PostDetails extends Component {
     comments: null
   }
 
+  getRouteCategory (match) {
+    return (match && match.params && match.params.category) || ''
+  }
+
   getRoutePostId (match) {
     return (match && match.params && match.params.post_id) || ''
   }
 
   componentWillMount () {
     const postId = this.getRoutePostId(this.props.match)
-    this.props.getPost(postId)
-    this.props.loadComments(postId)
+    this.props.getPost(postId).then(() => {
+      if (this.props.post) {
+        this.props.loadComments(postId)
+      } else { // IF invalid post redirect to category page
+        this.props.history.replace(`/${this.getRouteCategory(this.props.match)}`)
+      }
+    })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -79,11 +88,12 @@ PostDetails.propTypes = {
   comments: PropTypes.array,
   getPost: PropTypes.func,
   loadComments: PropTypes.func,
-  match: PropTypes.object
+  match: PropTypes.object,
+  history: PropTypes.object
 }
 
 const mapStateToProps = ({posts, comments}) => ({
-  post: posts && posts.selectedPostId ? posts.values[posts.selectedPostId] : null,
+  post: posts && posts.selectedPostId && posts.values && posts.values[posts.selectedPostId],
   comments: comments && comments.loaded
     ? comments.keys.reduce((result, id) => {
       result.push(comments.values[id])

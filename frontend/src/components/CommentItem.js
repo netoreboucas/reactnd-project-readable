@@ -42,7 +42,7 @@ class CommentItem extends Component {
           <Comment.Metadata>
             <Label size="small">
               <Icon name="time" />
-              <Timestamp time={comment.timestamp / 1000} />
+              <Timestamp time={comment.timestamp / 1000} format="full" />
             </Label>
             <Label icon="check" content={comment.voteScore} size="small" className="countVote" />
             <Label as="a" icon="thumbs up" color="green" size="small" className="upVote" onClick={() => this.props.voteComment(comment.id, 'upVote')} />

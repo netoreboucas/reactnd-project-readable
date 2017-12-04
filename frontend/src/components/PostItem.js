@@ -54,7 +54,7 @@ class PostItem extends Component {
             <strong>{post.author}</strong>
             <Label size="small">
               <Icon name="time" />
-              <Timestamp time={post.timestamp / 1000} />
+              <Timestamp time={post.timestamp / 1000} format="full" />
             </Label>
             <Label icon="check" content={post.voteScore} size="small" className="countVote" />
             <Label as="a" icon="thumbs up" color="green" size="small" className="upVote" onClick={() => this.props.votePost(post.id, 'upVote')} />

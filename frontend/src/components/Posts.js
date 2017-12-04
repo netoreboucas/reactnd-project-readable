@@ -34,6 +34,11 @@ class Posts extends Component {
       this.props.setSelectedCategory(newCategory)
       this.props.loadPosts(newCategory)
     }
+
+    // IF invalid category redirect to home page
+    if (newCategory !== '' && this.props.categories && this.props.categories.indexOf(newCategory) < 0) {
+      this.props.history.replace('/')
+    }
   }
 
   render () {
@@ -69,17 +74,25 @@ class Posts extends Component {
 }
 
 Posts.propTypes = {
+  categories: PropTypes.array,
   selectedCategory: PropTypes.string,
   posts: PropTypes.array,
   sortBy: PropTypes.string,
   setSelectedCategory: PropTypes.func,
   loadPosts: PropTypes.func,
   setSortBy: PropTypes.func,
-  match: PropTypes.object
+  match: PropTypes.object,
+  history: PropTypes.object
 }
 
 const mapStateToProps = ({categories, posts}) => ({
-  selectedCategory: categories.selectedCategory,
+  categories: categories && categories.loaded
+    ? categories.keys.reduce((result, id) => {
+      result.push(categories.values[id].path)
+      return result
+    }, [])
+    : null,
+  selectedCategory: categories && categories.loaded ? categories.selectedCategory : null,
   posts: posts && posts.loaded
     ? posts.keys.reduce((result, id) => {
       result.push(posts.values[id])
