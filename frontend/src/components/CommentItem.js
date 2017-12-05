@@ -4,11 +4,11 @@ import { connect } from 'react-redux'
 import { Button, Comment, Form, Header, Icon, Label, Modal } from 'semantic-ui-react'
 import Timestamp from 'react-timestamp'
 
-import { voteComment, editComment, deleteComment } from '../actions'
+import { voteComment, editComment, deleteComment } from '../actions/comments'
 
 class CommentItem extends Component {
   state = {
-    body: '',
+    editBody: '',
     openEditModal: false,
     openDeleteModal: false
   }
@@ -17,7 +17,7 @@ class CommentItem extends Component {
 
   showEditComment = () => {
     this.setState({
-      body: this.props.comment.body,
+      editBody: this.props.comment.body,
       openEditModal: true
     })
   }
@@ -33,22 +33,23 @@ class CommentItem extends Component {
 
   render () {
     const { comment } = this.props
-    const { body, openEditModal, openDeleteModal } = this.state
+    const { editBody, openEditModal, openDeleteModal } = this.state
+    const { id, author, timestamp, voteScore, body } = comment
 
     return (
       <Comment>
         <Comment.Content>
-          <Comment.Author as="span">{comment.author}</Comment.Author>
+          <Comment.Author as="span">{author}</Comment.Author>
           <Comment.Metadata>
             <Label size="small">
               <Icon name="time" />
-              <Timestamp time={comment.timestamp / 1000} format="full" />
+              <Timestamp time={timestamp / 1000} format="full" />
             </Label>
-            <Label icon="check" content={comment.voteScore} size="small" className="countVote" />
-            <Label as="a" icon="thumbs up" color="green" size="small" className="upVote" onClick={() => this.props.voteComment(comment.id, 'upVote')} />
-            <Label as="a" icon="thumbs down" color="red" size="small" className="downVote" onClick={() => this.props.voteComment(comment.id, 'downVote')} />
+            <Label icon="check" content={voteScore} size="small" className="countVote" />
+            <Label as="a" icon="thumbs up" color="green" size="small" className="upVote" onClick={() => this.props.voteComment(id, 'upVote')} />
+            <Label as="a" icon="thumbs down" color="red" size="small" className="downVote" onClick={() => this.props.voteComment(id, 'downVote')} />
           </Comment.Metadata>
-          <Comment.Text>{comment.body}</Comment.Text>
+          <Comment.Text>{body}</Comment.Text>
           <Comment.Actions>
             <Comment.Action onClick={this.showEditComment}>Edit</Comment.Action>
             <Comment.Action onClick={this.showDeleteComment}>Delete</Comment.Action>
@@ -58,8 +59,8 @@ class CommentItem extends Component {
         <Modal open={openEditModal}>
           <Header icon="edit" content="Edit comment" />
           <Modal.Content>
-            <Form id="editForm" onSubmit={() => this.confirmEditComment(comment.id, body)}>
-              <Form.TextArea placeholder="Write here your comment about the post..." name="body" value={body} onChange={this.handleChange} required />
+            <Form id="editForm" onSubmit={() => this.confirmEditComment(comment.id, editBody)}>
+              <Form.TextArea placeholder="Write here your comment about the post..." name="editBody" value={editBody} onChange={this.handleChange} required />
             </Form>
           </Modal.Content>
           <Modal.Actions>

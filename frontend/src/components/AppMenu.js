@@ -7,27 +7,15 @@ import { capitalize } from '../utils/helpers'
 
 import AddPostModal from './AddPostModal'
 
-import { loadCategories } from '../actions'
+import { loadCategories } from '../actions/categories'
 
 class AppMenu extends Component {
-  state = {
-    categories: null,
-    selectedCategory: null
-  }
-
   componentDidMount () {
     this.props.loadCategories()
   }
 
-  componentWillReceiveProps (nextProps) {
-    this.setState((prevState, props) => ({
-      categories: nextProps.categories,
-      selectedCategory: nextProps.selectedCategory
-    }))
-  }
-
   render () {
-    const { categories, selectedCategory } = this.state
+    const { categories, selectedCategory } = this.props
 
     return (
       <Menu vertical inverted fixed="left">

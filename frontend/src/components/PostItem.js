@@ -6,11 +6,12 @@ import { withRouter } from 'react-router'
 import { Button, Form, Header, Icon, Item, Label, Modal } from 'semantic-ui-react'
 import Timestamp from 'react-timestamp'
 
-import { votePost, editPost, deletePost } from '../actions'
+import { votePost, editPost, deletePost } from '../actions/posts'
 
 class PostItem extends Component {
   state = {
-    body: '',
+    editTitle: '',
+    editBody: '',
     openEditModal: false,
     openDeleteModal: false
   }
@@ -19,8 +20,8 @@ class PostItem extends Component {
 
   showEditPost = () => {
     this.setState({
-      title: this.props.post.title,
-      body: this.props.post.body,
+      editTitle: this.props.post.title,
+      editBody: this.props.post.body,
       openEditModal: true
     })
   }
@@ -43,26 +44,27 @@ class PostItem extends Component {
   }
 
   render () {
-    const { post } = this.props
-    const { title, body, openEditModal, openDeleteModal } = this.state
+    const { post, votePost } = this.props
+    const { editTitle, editBody, openEditModal, openDeleteModal } = this.state
+    const { id, category, title, author, timestamp, voteScore, commentCount, body } = post
 
     return (
       <Item>
         <Item.Content>
-          <Item.Header as={Link} to={`/${post.category}/${post.id}`}>{post.title}</Item.Header>
+          <Item.Header as={Link} to={`/${category}/${id}`}>{title}</Item.Header>
           <Item.Extra>
-            <strong>{post.author}</strong>
+            <strong>{author}</strong>
             <Label size="small">
               <Icon name="time" />
-              <Timestamp time={post.timestamp / 1000} format="full" />
+              <Timestamp time={timestamp / 1000} format="full" />
             </Label>
-            <Label icon="check" content={post.voteScore} size="small" className="countVote" />
-            <Label as="a" icon="thumbs up" color="green" size="small" className="upVote" onClick={() => this.props.votePost(post.id, 'upVote')} />
-            <Label as="a" icon="thumbs down" color="red" size="small" className="downVote" onClick={() => this.props.votePost(post.id, 'downVote')} />
-            <Label as={Link} to={`/${post.category}/${post.id}`} icon="comments" content={post.commentCount} size="small" />
-            <Label as={Link} to={`/${post.category}`} icon="tag" content={post.category} size="small" />
+            <Label icon="check" content={voteScore} size="small" className="countVote" />
+            <Label as="a" icon="thumbs up" color="green" size="small" className="upVote" onClick={() => votePost(id, 'upVote')} />
+            <Label as="a" icon="thumbs down" color="red" size="small" className="downVote" onClick={() => votePost(id, 'downVote')} />
+            <Label as={Link} to={`/${category}/${id}`} icon="comments" content={commentCount} size="small" />
+            <Label as={Link} to={`/${category}`} icon="tag" content={category} size="small" />
           </Item.Extra>
-          <Item.Description>{post.body}</Item.Description>
+          <Item.Description>{body}</Item.Description>
           <Item.Extra>
             <a className="action" onClick={this.showEditPost}>Edit</a>
             <a className="action" onClick={this.showDeletePost}>Delete</a>
@@ -72,9 +74,9 @@ class PostItem extends Component {
         <Modal open={openEditModal}>
           <Header icon="edit" content="Edit post" />
           <Modal.Content>
-            <Form id="editForm" onSubmit={() => this.confirmEditPost(post.id, title, body)}>
-              <Form.Input label="Title" placeholder="What's the post title?" name="title" value={title} onChange={this.handleChange} required />
-              <Form.TextArea label="Text" placeholder="Write here your post text..." name="body" value={body} onChange={this.handleChange} required />
+            <Form id="editForm" onSubmit={() => this.confirmEditPost(id, editTitle, editBody)}>
+              <Form.Input label="Title" placeholder="What's the post title?" name="editTitle" value={editTitle} onChange={this.handleChange} required />
+              <Form.TextArea label="Text" placeholder="Write here your post text..." name="editBody" value={editBody} onChange={this.handleChange} required />
             </Form>
           </Modal.Content>
           <Modal.Actions>

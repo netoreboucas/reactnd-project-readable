@@ -1,34 +1,30 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Dimmer, Item, Loader, Menu } from 'semantic-ui-react'
+import { Dimmer, Item, Loader, Menu, Message } from 'semantic-ui-react'
 
 import PostItem from './PostItem'
 
-import { setSelectedCategory, loadPosts, setSortBy } from '../actions'
+import { setSelectedCategory } from '../actions/categories'
+import { loadPosts, setSortBy } from '../actions/posts'
 
 class Posts extends Component {
-  state = {
-    posts: null,
-    sortBy: null
-  }
-
   getRouteCategory (match) {
     return (match && match.params && match.params.category) || ''
   }
 
-  componentWillMount () {
+  getHashValue (key) {
+    var matches = window.location.hash.match(new RegExp(key + '=([^&]*)'))
+    return matches ? matches[1] : null
+  }
+
+  componentDidMount () {
     const category = this.getRouteCategory(this.props.match)
     this.props.setSelectedCategory(category)
     this.props.loadPosts(category)
   }
 
   componentWillReceiveProps (nextProps) {
-    this.setState((prevState, props) => ({
-      posts: nextProps.posts,
-      sortBy: nextProps.sortBy
-    }))
-
     const newCategory = this.getRouteCategory(nextProps.match)
     if (newCategory !== nextProps.selectedCategory) {
       this.props.setSelectedCategory(newCategory)
@@ -37,12 +33,44 @@ class Posts extends Component {
 
     // IF invalid category redirect to home page
     if (newCategory !== '' && this.props.categories && this.props.categories.indexOf(newCategory) < 0) {
-      this.props.history.replace('/')
+      this.props.history.replace(`/#invalidCategory=${newCategory}`)
     }
   }
 
+  checkInvalidCategoryOrPost () {
+    const invalidCategory = this.getHashValue('invalidCategory')
+
+    if (invalidCategory) {
+      return (
+        <Message negative>
+          <Message.Header>Invalid Category</Message.Header>
+          <p>
+            You are trying to access the category <i><strong>{invalidCategory}</strong></i>, but this category does not exist. <br />
+            Please choose a valid category on the left side menu.
+          </p>
+        </Message>
+      )
+    }
+
+    const invalidPost = this.getHashValue('invalidPost')
+
+    if (invalidPost) {
+      return (
+        <Message negative>
+          <Message.Header>Invalid Post</Message.Header>
+          <p>
+            You are trying to access the post <i><strong>{invalidPost}</strong></i>, but this post does not exist. <br />
+            Please choose a valid post bellow.
+          </p>
+        </Message>
+      )
+    }
+
+    return null
+  }
+
   render () {
-    const { posts, sortBy } = this.state
+    const { posts, sortBy } = this.props
 
     return (
       <div>
@@ -55,6 +83,8 @@ class Posts extends Component {
             Votes
           </Menu.Item>
         </Menu>
+
+        {this.checkInvalidCategoryOrPost()}
 
         {posts &&
           <Item.Group divided>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Button, Form } from 'semantic-ui-react'
 
-import { addComment } from '../actions'
+import { addComment } from '../actions/comments'
 
 class AddCommentForm extends Component {
   state = {

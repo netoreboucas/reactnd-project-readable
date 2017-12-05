@@ -7,7 +7,8 @@ import PostItem from './PostItem'
 import CommentItem from './CommentItem'
 import AddCommentForm from './AddCommentForm'
 
-import { getPost, loadComments } from '../actions'
+import { getPost } from '../actions/posts'
+import { loadComments } from '../actions/comments'
 
 class PostDetails extends Component {
   state = {
@@ -23,13 +24,13 @@ class PostDetails extends Component {
     return (match && match.params && match.params.post_id) || ''
   }
 
-  componentWillMount () {
+  componentDidMount () {
     const postId = this.getRoutePostId(this.props.match)
     this.props.getPost(postId).then(() => {
       if (this.props.post) {
         this.props.loadComments(postId)
       } else { // IF invalid post redirect to category page
-        this.props.history.replace(`/${this.getRouteCategory(this.props.match)}`)
+        this.props.history.replace(`/${this.getRouteCategory(this.props.match)}#invalidPost=${postId}`)
       }
     })
   }

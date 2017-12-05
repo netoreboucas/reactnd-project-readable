@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Button, Form, Header, Modal } from 'semantic-ui-react'
 
-import { addPost } from '../actions'
+import { addPost } from '../actions/posts'
 
 class AddPostModal extends Component {
   state = {
@@ -82,7 +82,6 @@ const mapStateToProps = ({ categories }) => ({
     ? categories.keys.reduce((result, id) => {
       const category = categories.values[id]
       result.push({
-        key: category.path,
         text: category.path,
         value: category.name
       })
